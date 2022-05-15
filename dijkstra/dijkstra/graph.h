@@ -1,7 +1,8 @@
 #pragma once
 #include "Node.h"
-#include <fstream>
 #define TAM 100
+
+
 template <class T>
 class graph
 {
@@ -18,7 +19,14 @@ public:
 	bool BFS(T ori, T dest);
 	void cargarArchivo(string nom);
 
-	void mostrarCamino(int dest);
+	void mostrarCamino(T dest);
+	void Dikjstra(graph g, string ori);
+
+	Lista8<T>* getLista();
+
+
+
+
 };
 template <class T>
 graph<T>::graph()
@@ -97,7 +105,6 @@ bool graph<T>::BFS(T ori, T dest)
 		{
 			if (arr[adya].getMarca() == false)
 			{
-				//cout<<adya<<" ";
 				arr[adya].setPadre(vert);
 				if (adya == dest)
 				{
@@ -150,7 +157,7 @@ void graph<T>::cargarArchivo(string nom)
 }
 
 template <class T>
-void graph<T>::mostrarCamino(int dest)
+void graph<T>::mostrarCamino(T dest)
 {
 	if (dest != -1)
 	{
@@ -158,3 +165,54 @@ void graph<T>::mostrarCamino(int dest)
 		cout << dest << " - ";
 	}
 }
+
+template<class T>
+inline void graph<T>::Dikjstra(graph grafo, string ori)
+{
+
+
+
+		priority_queue <Point, vector<Point>, myComparator > ColaP; // el primero en salir es el de Distancia 1, luego 2, etc. Se puede  usar montículo MIN
+
+
+		grafo[ori].setDistancia(0);
+		ColaP. (G[ori].Dist, ori); // El montículo tiene nodos con 2 atributos: Distancia y Vértice origen
+
+	while (ColaPpq.empty() == false) 
+	{
+
+		Point Duo = ColaP.top();	// Duo tiene una Distancia y el vértice
+		string Vi = Duo.getY();  // El Vértice es el segundo elemento
+
+		if ((grafo[Vi].getMarca == false))
+		{
+			grafo[Vi].setMarca(true);
+			Tripla<T> Ady = grafo[Vi].getLista().getPrimer(); //Se puede usar sacar siguiente adyacente
+			while (Ady != NULL)
+			{
+
+				if (grafo[Ady.pos()].getMarca == false and Ady.Peso() > 0) {
+					if ((grafo[Vi].Distancia() + Ady.Peso) < (grafo[Ady.pos()].Distancia()) )
+					{
+					grafo[Ady.pos()].Distancia() = grafo[Vi].Distancia() + Ady.Peso();
+					grafo[Ady.pos()].Padre() = Vi;
+					ColaP.push(grafo[Ady.pos()].Distancia(), Ady.pos());
+					}
+				}
+
+			}			
+		}
+		Ady = Ady.getSiguiente(); //Se puede usar sacar siguiente adyacente
+
+	}
+	return grafo;
+
+}
+
+template<class T>
+inline Lista8<T>* graph<T>::getLista()
+{
+	return cola;
+}
+
+
