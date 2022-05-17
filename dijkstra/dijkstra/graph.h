@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 #include "Node.h"
 #define TAM 100
 
@@ -22,7 +22,7 @@ public:
 	void mostrarCamino(T dest);
 	void Dikjstra(graph g, string ori);
 
-	Lista8<T>* getLista();
+	//Lista8<T>* getLista();
 
 
 
@@ -170,24 +170,22 @@ template<class T>
 inline void graph<T>::Dikjstra(graph grafo, string ori)
 {
 
-
-
-		priority_queue <Point, vector<Point>, myComparator > ColaP; // el primero en salir es el de Distancia 1, luego 2, etc. Se puede  usar montículo MIN
+		priority_queue <Point, vector<Point>, myComparator > ColaP; // el primero en salir es el de Distancia 1, luego 2, etc. Se puede  usar montï¿½culo MIN
 
 
 		grafo[ori].setDistancia(0);
-		ColaP. (G[ori].Dist, ori); // El montículo tiene nodos con 2 atributos: Distancia y Vértice origen
+		ColaP. (G[ori].Dist, ori); // El montï¿½culo tiene nodos con 2 atributos: Distancia y Vï¿½rtice origen
 
 	while (ColaPpq.empty() == false) 
 	{
 
-		Point Duo = ColaP.top();	// Duo tiene una Distancia y el vértice
-		string Vi = Duo.getY();  // El Vértice es el segundo elemento
+		Point Duo = ColaP.top();	// Duo tiene una Distancia y el vï¿½rtice
+		string Vi = Duo.getY();  // El Vï¿½rtice es el segundo elemento
 
 		if ((grafo[Vi].getMarca == false))
 		{
 			grafo[Vi].setMarca(true);
-			Tripla<T> Ady = grafo[Vi].getLista().getPrimer(); //Se puede usar sacar siguiente adyacente
+			*Tripla<T> Ady = grafo[Vi].getLista().getPrimer(); //Se puede usar sacar siguiente adyacente
 			while (Ady != NULL)
 			{
 
@@ -209,10 +207,6 @@ inline void graph<T>::Dikjstra(graph grafo, string ori)
 
 }
 
-template<class T>
-inline Lista8<T>* graph<T>::getLista()
-{
-	return cola;
-}
+
 
 

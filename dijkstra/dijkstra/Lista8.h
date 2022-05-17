@@ -18,7 +18,7 @@ class Lista8
 	T busquedaSecuencialNoRecursiva(T dato);
 	T busquedaSecuencialRecursiva(T dato);
 	T buscarRecursivamente(T* dato, Tripla<T>* aux);
-	T menorLista(bool(*funcComp)(T, T));;
+	T menorLista(bool(*funcComp)(T, T));
 	T findInPos(int pos);
 
 	void mostrarLista(void (*ptrMostrar)(T*));
@@ -26,6 +26,7 @@ class Lista8
 
 	void eliminar(T dato);
 };
+
 
 template<class T>
 Lista8<T>::Lista8()
