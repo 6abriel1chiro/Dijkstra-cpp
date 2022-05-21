@@ -9,8 +9,9 @@ public:
 	~graph();
 	void readFile(string name);
 	void mostrar();
-	void Dikjstra(graph grafo, string ori);
-
+	void Dikjstra(map<T, Nodo<T>>& grafos, string ori);
+	void inicio(map<T, Nodo<T>>& grafos);
+	map<T, Nodo<T>>& getGrafo();
 	void reset();
 
 private :
@@ -60,47 +61,81 @@ template<class T>
 
 
 }
-template<class T>
- void graph<T>::Dikjstra(graph G, string ori)
+
+template <class T>
+void Grafo<T>::inicio(map<T, Nodo<T>>& grafos)
 {
-
-	
-
-		minHeap<int> ColaP;
-		G[ori].setDistancia(0);
-		ColaP.insertar(G[ori].getDistancia(), ori); // El montículo tiene nodos con 2 atributos: Distancia y Vértice origen
-
-	while (ColaP.empty() != false) 
+	map<string, Nodo<string>>::iterator it;
+	for (it = grafos.begin(); it != grafos.end(); it++)
 	{
-
-		Par<T> Duo;	// Duo tiene una Distancia y el vértice
-		Duo.setElem(ColaP.getVert());
-		Duo.setweight(ColaP.getElem());
-		ColaP.eliminar();
-
-		string Vi = Duo.getElem();  // El Vértice es el segundo elemento
-
-		if ((graph[Vi].getMarca() == false))
-		{
-			graph[Vi].setMarca(true);
-			Par<T>* Ady = graph[Vi].getLista().getFirst(); //Se puede usar sacar siguiente adyacente
-			while (Ady != NULL)
-			{
-
-				if (graph[Ady.pos()].getMarca == false and Ady.getweight() > 0) {
-					if ((graph[Vi].getDistancia() + Ady.getweight) < (graph[Ady.getElem()].getDistancia()) )
-					{
-					graph[Ady.getElem()].getDistancia() = grafo[Vi].getDistancia() + Ady.getweight();
-					graph[Ady.getElem()].getPadre() = Vi;
-					ColaP.insertar(graph[Ady.getElem()].getDistancia(), Ady.getElem());
-					}
-				}
-
-			}			
-		}
-		Ady = Ady.getnext(); //Se puede usar sacar siguiente adyacente
-
+		it->second.setMarca(false);
+		it->second.setDistancia(9999);
+		it->second.setPadre("#");
 	}
-	return G;
-	
+}
+template <class T>
+map<T, Nodo<T>>& Grafo<T>::getGrafo()
+{
+	return grafo;
+}
+template <class T>
+void Grafo<T>::llenarGrafo(map<T, Nodo<T>>& grafos, string nom)
+{
+	ifstream arch;
+	string dato1, dato2;
+	int dato3;
+	arch.open(nom);
+	while (!arch.eof())
+	{
+		arch >> dato1;
+		arch >> dato2;
+		arch >> dato3;
+		grafos[dato1].getLista()->insertarPrincipio(dato2, dato3);
+		grafos[dato2].getLista()->insertarPrincipio(dato1, dato3);
+	}
+	arch.close();
+}
+
+template<class T>
+ void graph<T>::Dikjstra(map<T, Nodo<T>>& grafos, string ori)
+ {
+	inicio(grafos);
+	string Vi;
+	NodoMonticulo<int> Duo;
+	Par<string>* Ady;
+
+	Monticulo<int> colaP;
+	grafos[ori].setDistancia(0);
+	colaP.poner(grafos[ori].getDistancia(), ori);
+
+	while (colaP.vacio() != false)
+	{
+		//Duo
+		Duo.poner(colaP.buscarMenor(), colaP.buscarOrigen());
+		colaP.eliminar();
+		Vi = Duo.getVert();
+
+		if (grafos[Vi].getMarca() == false)
+		{
+			grafos[Vi].setMarca(true);
+			if (grafos[Vi].getLista() != NULL)
+			{
+				Ady = grafos[Vi].getLista()->getPrimer();
+				while (Ady != NULL)
+				{
+					if (grafos[Ady->getElem()].getMarca() == false && Ady->getPeso() > 0)
+					{
+						int dist = grafos[Vi].getDistancia() + Ady->getPeso();
+						if (dist < grafos[Ady->getElem()].getDistancia())
+						{
+							grafos[Ady->getElem()].setDistancia(dist);
+							grafos[Ady->getElem()].setPadre(Vi);
+							colaP.poner(grafos[Ady->getElem()].getDistancia(), Ady->getElem());
+						}
+					}
+					Ady = Ady->getSig();
+				}
+			}
+		}
+	}
 }
